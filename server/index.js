@@ -35,9 +35,14 @@ app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-app.post("/api/test", (req, res) => {
-	const CommunityPost = new Post({ title: "제목", content: "글" });
-	CommunityPost.save().then(() => {
-		res.status(200).json({ success: true, text: "hello my name is seonjae" });
-	});
+app.post("/api/post/submit", (req, res) => {
+	let temp = req.body;
+	const CommunityPost = new Post(temp);
+	CommunityPost.save()
+		.then(() => {
+			res.status(200).json({ success: true });
+		})
+		.catch((err) => {
+			res.status(400).json({ success: false });
+		});
 });
