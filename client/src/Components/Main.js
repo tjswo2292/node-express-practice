@@ -1,9 +1,26 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
 const Main = () => {
-	return (
-		<div>
-			<p>여기는 todo가 나오는 곳</p>
-		</div>
-	);
+	const [todoList, setTodoList] = useState([]);
+
+	useEffect(() => {
+		axios
+			.post("/api/post/list")
+			.then((response) => {
+				setTodoList([...response.data.postList]);
+			})
+			.catch((err) => {
+				console.log("에러임");
+			});
+	}, []);
+
+	return todoList.map((element, index) => (
+		<Link to={`/post/${element.postNum}`} key={index}>
+			<div>{element.content}</div>
+		</Link>
+	));
 };
 
 export default Main;
